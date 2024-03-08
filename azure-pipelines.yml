@@ -1,0 +1,28 @@
+# Ant
+# Build your Java projects and run tests with Apache Ant.
+# Add steps that save build artifacts and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- none
+
+pool:
+  name: my-host
+
+steps:
+- script: pwd        
+  displayName: Getting present working directory
+- script: |
+    cd /home/azureuser/oe-core
+    pwd
+    echo "getting username"
+    whoami
+    echo "Job started running"
+    git config --global --add safe.directory /home/azureuser/oe-core/.repo/repo
+    repo init -u git://git.toradex.com/toradex-manifest.git -b kirkstone-6.x.y -m tdxref/default.xml,
+    repo sync
+    . export
+    bitbake core-image-minimal
+    echo "job has been completed"
+  displayName: Executing JOb  
+  
